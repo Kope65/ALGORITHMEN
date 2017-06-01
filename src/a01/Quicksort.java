@@ -8,12 +8,12 @@ public class Quicksort {
 
 	// Unsortiertes Test-Array
 	protected static int[] intArr = { 16, 2300, 14, 15, 10, 1, -5, 200, 199,
-			201, -31, 3, 55, -157, -1250, 5, 6, 7, 8, 17, -17, 111, -111, 1111,
+			201, -31, 3, 55, -157, -1250, 5, 5, 6, 7, 8, 17, -17, 111, -111, 1111,
 			125, 145, 159, 426, 428, 456, 441, 2356, 36365, 4575, 5698, 54447,
 			451124, 1552, 45863, 25863, 15523, 565665, 2254, 5484, 121658,
 			15156, 6555 };
-	protected static String filepathRand = "C:/Users/Toni/Documents/PR2/ALGO/FileIntArrayMitBeispielen/Rand100_1";
-	protected static String filepathSort = "C:/Users/Toni/Documents/PR2/ALGO/FileIntArrayMitBeispielen/Sort100_1";
+	protected static String filepathRand = "./FileIntArrayMitBeispielen/Rand100_1";
+	protected static String filepathSort = "./FileIntArrayMitBeispielen/Sort100_1";
 	protected static long startTime;
 	protected static long endTime;
 
@@ -91,18 +91,18 @@ public class Quicksort {
 				while (array[left] < pivot) { // Suche von links Wert groeﬂer als 'pivot'
 					left++;
 				}
-				while (array[right] > pivot) { // Suche von links Wert kleiner als 'pivot'
+				while (array[right] > pivot) { // Suche von rechts Wert kleiner als 'pivot'
 					right--;
 				}
-				if (array[left] > array[right]) { // Wenn wert links kleiner als rechts, tausche Werte.
+				if (array[left] > array[right]) { // Wenn wert links groeﬂer als rechts, tausche Werte.
 					int helper = array[right];
 					array[right] = array[left];
 					array[left] = helper;
 				} else
-					return right; // Gebe rechte position zurueck
+					return left; // Gebe rechte Position zurueck
 			}
 		}
-		return left; // Gebe linke position zurueck
+		return right; // Gebe linke Position zurueck
 	}
 
 	/**
