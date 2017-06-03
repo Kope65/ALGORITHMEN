@@ -5,6 +5,14 @@ public class HashtableTest {
 	public static void main(String[] args) {
 		Hashtable<Object> hashtable = new Hashtable<Object>(10);
 		hashtable.put("Hallo", "Welt");
+		System.out.println(hashtable.get("Hallo"));
+		hashtable.put("Hallo", "Weltraum");		
+		System.out.println(hashtable.get("Hallo"));
+		hashtable.put(6, 12);
+		System.out.println(hashtable.get(6));
+		hashtable.remove("Hallo");
+		System.out.println(hashtable.get("Hallo"));
+		System.out.println(hashtable.get(6));
 	}
 
 }

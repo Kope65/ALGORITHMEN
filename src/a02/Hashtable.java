@@ -2,19 +2,21 @@ package a02;
 
 import java.util.LinkedList;
 
-public class Hashtable<T> implements Map<Object, Object> {
+public class Hashtable<T> implements Map {
 
 	private LinkedList<KeyValuePair>[] hashtable;
 
 	public Hashtable(int size) {
 		hashtable = (LinkedList<KeyValuePair>[]) new LinkedList[size];
+		for (int i = 0; i < hashtable.length; i++) {
+			hashtable[i] = new LinkedList<KeyValuePair>();
+		}
 	}
 
 	public Object put(Object key, Object value) {
 		KeyValuePair keyValuePair = new KeyValuePair(key, value);
 		int index = key.hashCode() % hashtable.length;
-		System.out.println(hashtable[index]);
-		if (hashtable[index].equals(null)) {			
+		if (hashtable[index].isEmpty()) {			
 			LinkedList<KeyValuePair> list = new LinkedList<KeyValuePair>();
 			list.add(keyValuePair);
 			hashtable[index] = list;
@@ -71,10 +73,6 @@ public class Hashtable<T> implements Map<Object, Object> {
 		protected Object getValue() {
 			return this.value;
 		}
-
-		// protected void setKey(Object key) {
-		// this.key = key;
-		// }
 
 		protected void setValue(Object value) {
 			this.value = value;
