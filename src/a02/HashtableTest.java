@@ -6,6 +6,8 @@ public class HashtableTest {
 
 	public static void main(String[] args) {
 		Hashtable<Object> hashtable = new Hashtable<Object>(7);
+		float floatKey = 16.345f;
+		float floatValue = 20.25698f;
 		
 		hashtable.put("Hallo", "Welt");
 		System.out.println("Value: " + hashtable.get("Hallo"));
@@ -21,8 +23,8 @@ public class HashtableTest {
 		System.out.println("Groesse des Hashtable: " + hashtable.getHashtableSize());
 		System.out.println("*****");
 		
-		hashtable.put("Hallo", "Weltraum");		
-		System.out.println("Value: " + hashtable.get("Hallo"));
+		hashtable.put("Hallo", "Weltraum");														// UEBERSCHREIBE EINTRAG
+		System.out.println("Value: " + hashtable.get("Hallo") + " UEBERSCHRIEBEN");
 		System.out.println(hashtable.toString());
 		System.out.println("Anzahl der Eintraege im Hashtable: " + hashtable.getElementCount());
 		System.out.println("Groesse des Hashtable: " + hashtable.getHashtableSize());
@@ -35,15 +37,22 @@ public class HashtableTest {
 		System.out.println("Groesse des Hashtable: " + hashtable.getHashtableSize());
 		System.out.println("*****");
 		
-		hashtable.put("0", "12");
-		System.out.println("Value: " + hashtable.get("0"));
+		hashtable.put("6", 15);																	// UEBERSCHREIBE EINTRAG
+		System.out.println("Value: " + hashtable.get("6") + " UEBERSCHRIEBEN");
 		System.out.println(hashtable.toString());
 		System.out.println("Anzahl der Eintraege im Hashtable: " + hashtable.getElementCount());
 		System.out.println("Groesse des Hashtable: " + hashtable.getHashtableSize());
 		System.out.println("*****");
 		
-		hashtable.remove("Hallo");
-		System.out.println("Value: " + hashtable.get("Hallo")   + " REMOVED");
+		hashtable.put(6, 50);																	
+		System.out.println("Value: " + hashtable.get(6));
+		System.out.println(hashtable.toString());
+		System.out.println("Anzahl der Eintraege im Hashtable: " + hashtable.getElementCount());
+		System.out.println("Groesse des Hashtable: " + hashtable.getHashtableSize());
+		System.out.println("*****");
+		
+		hashtable.remove("Hallo"); 																// ENTFERNE EINTRAG
+		System.out.println("Value: " + hashtable.get("Hallo")   + " ENTFERNT");
 		System.out.println(hashtable.get("Hallo"));
 		System.out.println(hashtable.toString());
 		System.out.println("Anzahl der Eintraege im Hashtable: " + hashtable.getElementCount());
@@ -57,8 +66,8 @@ public class HashtableTest {
 		System.out.println("Groesse des Hashtable: " + hashtable.getHashtableSize());
 		System.out.println("*****");
 		
-		hashtable.put("Cat", "Hotdog");
-		System.out.println("Value: " + hashtable.get("Cat"));
+		hashtable.put("Cat", "Hotdog"); 														// UEBERSCHREIBE EINTRAG
+		System.out.println("Value: " + hashtable.get("Cat") + " UEBERSCHRIEBEN");
 		System.out.println(hashtable.toString());
 		System.out.println("Anzahl der Eintraege im Hashtable: " + hashtable.getElementCount());
 		System.out.println("Groesse des Hashtable: " + hashtable.getHashtableSize());
@@ -71,22 +80,22 @@ public class HashtableTest {
 		System.out.println("Groesse des Hashtable: " + hashtable.getHashtableSize());
 		System.out.println("*****");
 		
-		hashtable.remove("Cat");
+		hashtable.remove("Cat"); 																// ENTFERNE EINTRAG
 		System.out.println("Value: " + hashtable.get("Cat"));
 		System.out.println(hashtable.toString());
 		System.out.println("Anzahl der Eintraege im Hashtable: " + hashtable.getElementCount());
 		System.out.println("Groesse des Hashtable: " + hashtable.getHashtableSize());
 		System.out.println("*****");
 		
-		hashtable.put(16.258f, 120.456f);		
-		System.out.println(hashtable.get(16.258f));
+		hashtable.put(floatKey, floatValue);		
+		System.out.println(hashtable.get(floatKey));
 		System.out.println(hashtable.toString());
 		System.out.println("Anzahl der Eintraege im Hashtable: " + hashtable.getElementCount());
 		System.out.println("Groesse des Hashtable: " + hashtable.getHashtableSize());
 		System.out.println("*****");
 		
-		hashtable.remove(16.258f);
-		System.out.println("Value: " + hashtable.get(16.258f) + " REMOVED");
+		hashtable.remove(floatKey); 																// ENTFERNE EINTRAG
+		System.out.println("Value: " + hashtable.get(floatKey) + " ENTFERNT");
 		System.out.println(hashtable.toString());
 		System.out.println("Anzahl der Eintraege im Hashtable: " + hashtable.getElementCount());
 		System.out.println("Groesse des Hashtable: " + hashtable.getHashtableSize());
@@ -127,8 +136,8 @@ public class HashtableTest {
 		System.out.println("Groesse des Hashtable: " + hashtable.getHashtableSize());
 		System.out.println("*****");
 		
-		hashtable.remove(0);
-		System.out.println("Value: " + hashtable.get(0)   + " REMOVED");
+		hashtable.remove(0); 																// ENTFERNE EINTRAG
+		System.out.println("Value: " + hashtable.get(0)   + " ENTFERNT");
 		System.out.println(hashtable.toString());
 		System.out.println("Anzahl der Eintraege im Hashtable: " + hashtable.getElementCount());
 		System.out.println("Groesse des Hashtable: " + hashtable.getHashtableSize());
@@ -141,15 +150,15 @@ public class HashtableTest {
 		System.out.println("Groesse des Hashtable: " + hashtable.getHashtableSize());
 		System.out.println("*****");
 		
-		hashtable.put("Elefant", "Gedaechtnisluecke");
-		System.out.println("Value: " + hashtable.get("Elefant"));
+		hashtable.put("Elefant", "Gedaechtnisluecke");										// UEBERSCHREIBE EINTRAG
+		System.out.println("Value: " + hashtable.get("Elefant") + " UEBERSCHRIEBEN");
 		System.out.println(hashtable.toString());
 		System.out.println("Anzahl der Eintraege im Hashtable: " + hashtable.getElementCount());
 		System.out.println("Groesse des Hashtable: " + hashtable.getHashtableSize());
 		System.out.println("*****");
 		
 		hashtable.put("Hola", "Adios");
-		System.out.println("Value: " + hashtable.get("Tach"));
+		System.out.println("Value: " + hashtable.get("Hola"));
 		System.out.println(hashtable.toString());
 		System.out.println("Anzahl der Eintraege im Hashtable: " + hashtable.getElementCount());
 		System.out.println("Groesse des Hashtable: " + hashtable.getHashtableSize());
@@ -157,6 +166,13 @@ public class HashtableTest {
 		
 		hashtable.put(30, 12.345678f);
 		System.out.println("Value: " + hashtable.get(30));
+		System.out.println(hashtable.toString());
+		System.out.println("Anzahl der Eintraege im Hashtable: " + hashtable.getElementCount());
+		System.out.println("Groesse des Hashtable: " + hashtable.getHashtableSize());
+		System.out.println("*****");
+		
+		hashtable.remove(30); 																// ENTFERNE EINTRAG
+		System.out.println("Value: " + hashtable.get(30) + " ENTFERNT");
 		System.out.println(hashtable.toString());
 		System.out.println("Anzahl der Eintraege im Hashtable: " + hashtable.getElementCount());
 		System.out.println("Groesse des Hashtable: " + hashtable.getHashtableSize());
