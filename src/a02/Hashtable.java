@@ -115,7 +115,7 @@ public class Hashtable<T> implements Map {
 		return null;															// Gibt 'null' zurueck, wenn 'key' nicht vorhanden ist.
 	}
 	
-	// ***** GETTER ZUM TESTEN **********************
+	// ***** GETTER **********************
 	/**
 	 * Methode zum pruefen der Groesse des 'LinkedList<KeyValuePair>[]'.
 	 * 
