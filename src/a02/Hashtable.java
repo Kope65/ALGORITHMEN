@@ -11,7 +11,6 @@ import java.util.LinkedList;
  */
 public class Hashtable<T> implements Map {
 	private LinkedList<KeyValuePair>[] hashtable;
-	private int length;
 
 	/**
 	 * Konstruktor der Klasse 'Hashtable'. Initialisiert ein 'LinkedList<KeyValuePair>[]'
@@ -38,9 +37,15 @@ public class Hashtable<T> implements Map {
 	 *         sonst wird 'null' zurueckgegeben
 	 **/
 	public Object put(Object key, Object value) {
-		hashtable = checkAndResizeHashtable(hashtable);
+		hashtable = checkAndResizeHashtable(hashtable);							/***** ZUSATZAUFGABE *****/
 		KeyValuePair keyValuePair = new KeyValuePair(key, value);				// Erstelle ein 'KeyValuePair' aus den uebergebenen Werten.
-		int index = key.hashCode() % hashtable.length; 							// Ermittle den Index zum 'key'.
+		double indexDouble = Math.ceil(key.hashCode() % hashtable.length); 		// Ermittle den Index zum 'key' als 'double'.
+		int index = (int) Math.ceil(indexDouble);								// Runde den 'double' auf und mache cast zum 'int'
+		if(index < 0) {															// Wenn 'index' negativ...
+			index *= -1;														// ... multipliziere 'index' mit -1.
+		}
+		System.out.println("Index: " + index);									/** Ausgabe für Test **/
+		System.out.println("BEFORE put(): " + hashtable[index]);				/** Ausgabe für Test **/
 		if (hashtable[index].isEmpty()) {										// Wenn die Liste an Index 'index' leer ist...
 			hashtable[index].add(keyValuePair);									// ... fuege 'KeyValuePair' an der Stelle ein.
 		} else { 															
@@ -48,12 +53,14 @@ public class Hashtable<T> implements Map {
 				if (hashtable[index].get(i).getKey().equals(key)) { 			// Vergleiche Keys.
 					Object returnValue = hashtable[index].get(i).getValue();	// Packe alten 'value' in Hilfsfeld.
 					hashtable[index].get(i).setValue(value);					// Ueberschreibe 'value'.
+					System.out.println("AFTER put(): " + hashtable[index]);		/** Ausgabe für Test **/
 					return returnValue; 										// Gebe den alten 'value' zurueck.
 				} else {
 					hashtable[index].add(keyValuePair);							// Wenn 'key' nicht vorhanden ist, fuege 'KeyValuePair' hinzu.
 				}																
 			}																	
 		}
+		System.out.println("AFTER put(): " + hashtable[index]);					/** Ausgabe für Test **/
 		return null;
 	}
 	
@@ -66,11 +73,17 @@ public class Hashtable<T> implements Map {
 	 *         sonst 'null'
 	 **/
 	public Object get(Object key) {
-		int index = key.hashCode() % hashtable.length;							// Ermittle den Index zum 'key'.
-		for (int i = 0; i < hashtable[index].size(); i++) {	
-			if (hashtable[index].get(i).getKey().equals(key)) {					// Vergleiche Keys.
-				Object returnValue = hashtable[index].get(i).getValue();		// Packe alten 'value' in Hilfsfeld.
-				return returnValue;												// Gebe den alten 'value' zurueck.
+		double indexDouble = Math.ceil(key.hashCode() % hashtable.length); 		// Ermittle den Index zum 'key'.
+		int index = (int) Math.ceil(indexDouble);								// Runde den 'double' auf und mache cast zum 'int'
+		if(index < 0) {															// Wenn 'index' negativ...
+			index *= -1;														// ... multipliziere 'index' mit -1.
+		}
+		if (!hashtable[index].isEmpty()) {										
+			for (int i = 0; i < hashtable[index].size(); i++) {	
+				if (hashtable[index].get(i).getKey().equals(key)) {				// Vergleiche Keys.
+					Object returnValue = hashtable[index].get(i).getValue();	// Packe alten 'value' in Hilfsfeld.
+					return returnValue;											// Gebe den alten 'value' zurueck.
+				}
 			}
 		}
 		return null;															// Gibt 'null' zurueck, wenn 'key' nicht vorhanden ist.
@@ -85,17 +98,24 @@ public class Hashtable<T> implements Map {
 	 *         sonst 'null'
 	 **/
 	public Object remove(Object key) {
-		int index = key.hashCode() % hashtable.length;							// Ermittle den Index zum 'key'.
-		for (int i = 0; i < hashtable[index].size(); i++) {
-			if (hashtable[index].get(i).getKey().equals(key)) { 				// Vergleiche Keys.
-				Object returnValue = hashtable[index].get(i).getValue();		// Packe alten 'value' in Hilfsfeld.
-				hashtable[index].remove();										// loesche Eintrag
-				return returnValue;												// Gebe den alten 'value' zurueck.
+		double indexDouble = Math.ceil(key.hashCode() % hashtable.length); 		// Ermittle den Index zum 'key' als 'double'.
+		int index = (int) Math.ceil(indexDouble);								// Runde den 'double' auf und mache cast zum 'int'
+		if(index < 0) {															// Wenn 'index' negativ...
+			index *= -1;														// ... multipliziere 'index' mit -1.
+		}
+		if (!hashtable[index].isEmpty()) {										
+			for (int i = 0; i < hashtable[index].size(); i++) {
+				if (hashtable[index].get(i).getKey().equals(key)) { 			// Vergleiche Keys.
+					Object returnValue = hashtable[index].get(i).getValue();	// Packe alten 'value' in Hilfsfeld.
+					hashtable[index].remove();									// loesche Eintrag
+					return returnValue;											// Gebe den alten 'value' zurueck.
+				}
 			}
 		}
 		return null;															// Gibt 'null' zurueck, wenn 'key' nicht vorhanden ist.
 	}
 	
+	// ***** GETTER ZUM TESTEN **********************
 	/**
 	 * Methode zum pruefen der Groesse des 'LinkedList<KeyValuePair>[]'.
 	 * 
@@ -116,13 +136,14 @@ public class Hashtable<T> implements Map {
 			if(!hashtable[i].isEmpty()) {
 				for (int j = 0; j < hashtable[i].size(); j++) {
 					if(!hashtable[i].get(j).equals(null))
-						counter++;
+						counter++;												// Wenn Element vorhanden, zaehle 'counter' hoch.
 				}
 			}																			
 		}
 		return counter;
 	}
 	
+	// ***** ZUSATZAUFGABE **********************	
 	/**
 	 * Methode prueft das Verhaeltnis von Elementen zu der 
 	 * Groesse des ubergebenen 'LinkedList<KeyValuePair>[]'.
@@ -135,9 +156,8 @@ public class Hashtable<T> implements Map {
 	 * @return LinkedList<KeyValuePair>[]: Gibt ein 'LinkedList<KeyValuePair>[]'.
 	 */
 	public LinkedList<KeyValuePair>[] checkAndResizeHashtable(LinkedList<KeyValuePair>[] hashtableToCheck) {
-		if((hashtableToCheck.length/2) < this.getElementCount()) {
-			LinkedList<KeyValuePair>[] helperHashtable;
-			helperHashtable = new LinkedList[hashtableToCheck.length * 2];
+		if((hashtableToCheck.length/2) <= getElementCount()) {
+			LinkedList<KeyValuePair>[] helperHashtable = new LinkedList[hashtableToCheck.length * 2];
 			for (int i = 0; i < helperHashtable.length; i++) {
 				helperHashtable[i] = new LinkedList<KeyValuePair>();
 			}
@@ -145,7 +165,11 @@ public class Hashtable<T> implements Map {
 				if(!hashtableToCheck[i].isEmpty()) {
 					for (int j = 0; j < hashtableToCheck[i].size(); j++) {
 						if(!hashtableToCheck[i].get(j).equals(null)) {
-							int helperIndex = hashtableToCheck[i].get(j).getKey().hashCode() % helperHashtable.length;
+							double helperIndexDouble = Math.ceil(hashtableToCheck[i].get(j).getKey().hashCode() % helperHashtable.length); 		
+							int helperIndex = (int) Math.ceil(helperIndexDouble);
+							if(helperIndex < 0) {
+								helperIndex *= -1;
+							}
 							KeyValuePair helperKeyValuePair = new KeyValuePair(hashtableToCheck[i].get(j).getKey(), hashtableToCheck[i].get(j).getValue());
 							helperHashtable[helperIndex].add(helperKeyValuePair);
 						}
