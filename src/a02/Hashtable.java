@@ -56,7 +56,7 @@ public class Hashtable<T> implements Map {
 	public Object get(Object key) {
 		int index = key.hashCode() % hashtable.length;						// Formel zur Berechnung
 		for (int i = 0; i < hashtable[index].size(); i++) {
-			if (hashtable[index].get(i).getKey().equals(key)) {				// zum vergleichen wir equals verwendet
+			if (hashtable[index].get(i).getKey().equals(key)) {				// zum vergleichen wird equals verwendet
 				Object returnValue = hashtable[index].get(i).getValue();	//
 				return returnValue;											// gebe Value(Wert) aus
 			}
@@ -75,7 +75,7 @@ public class Hashtable<T> implements Map {
 	public Object remove(Object key) {
 		int index = key.hashCode() % hashtable.length;						// Formel zur Berechnung
 		for (int i = 0; i < hashtable[index].size(); i++) {
-			if (hashtable[index].get(i).getKey().equals(key)) { 			// zum vergleichen wir equals verwendet
+			if (hashtable[index].get(i).getKey().equals(key)) { 			// zum vergleichen wird equals verwendet
 				Object returnValue = hashtable[index].get(i).getValue();	//
 				hashtable[index].remove();									// lösche Eintrag
 				return returnValue;
