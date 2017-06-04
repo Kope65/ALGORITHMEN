@@ -115,7 +115,7 @@ public class Hashtable<T> implements Map {
 		return null;															// Gibt 'null' zurueck, wenn 'key' nicht vorhanden ist.
 	}
 	
-	// ***** GETTER **********************
+	// ***** GETTER ZUM TESTEN **********************
 	/**
 	 * Methode zum pruefen der Groesse des 'LinkedList<KeyValuePair>[]'.
 	 * 
@@ -130,7 +130,7 @@ public class Hashtable<T> implements Map {
 	 * 
 	 * @return int: die Anzahl der Elemente der 'LinkedList<KeyValuePair>[]'.
 	 */
-	public int getElementCount() {
+	public int getElementCount() { 												
 		int counter = 0;
 		for (int i = 0; i < hashtable.length; i++) {
 			if(!hashtable[i].isEmpty()) {
@@ -140,7 +140,7 @@ public class Hashtable<T> implements Map {
 				}
 			}																			
 		}
-		return counter;
+		return counter; 														// Gebe 'counter' zurueck
 	}
 	
 	// ***** ZUSATZAUFGABE **********************	
@@ -155,30 +155,30 @@ public class Hashtable<T> implements Map {
 	 * @param hashtableToCheck Das zu pruefende 'LinkedList<KeyValuePair>[]'
 	 * @return LinkedList<KeyValuePair>[]: Gibt ein 'LinkedList<KeyValuePair>[]'.
 	 */
-	public LinkedList<KeyValuePair>[] checkAndResizeHashtable(LinkedList<KeyValuePair>[] hashtableToCheck) {
-		if((hashtableToCheck.length/2) <= getElementCount()) {
-			LinkedList<KeyValuePair>[] helperHashtable = new LinkedList[hashtableToCheck.length * 2];
-			for (int i = 0; i < helperHashtable.length; i++) {
-				helperHashtable[i] = new LinkedList<KeyValuePair>();
+	public LinkedList<KeyValuePair>[] checkAndResizeHashtable(LinkedList<KeyValuePair>[] hashtableToCheck) { 
+		if((hashtableToCheck.length/2) <= getElementCount()) {												 // Wenn Anzahl der Elemente mind. halb so gross wie das [] ist...
+			LinkedList<KeyValuePair>[] helperHashtable = new LinkedList[hashtableToCheck.length * 2];		 // ... initialisiere neues LinkedList<KeyValuePair>[] mit doppelter Groesse.
+			for (int i = 0; i < helperHashtable.length; i++) {												 
+				helperHashtable[i] = new LinkedList<KeyValuePair>(); 										 
 			}
 			for (int i = 0; i < hashtableToCheck.length; i++) {
-				if(!hashtableToCheck[i].isEmpty()) {
-					for (int j = 0; j < hashtableToCheck[i].size(); j++) {
-						if(!hashtableToCheck[i].get(j).equals(null)) {
-							double helperIndexDouble = Math.ceil(hashtableToCheck[i].get(j).getKey().hashCode() % helperHashtable.length); 		
-							int helperIndex = (int) Math.ceil(helperIndexDouble);
-							if(helperIndex < 0) {
-								helperIndex *= -1;
-							}
-							KeyValuePair helperKeyValuePair = new KeyValuePair(hashtableToCheck[i].get(j).getKey(), hashtableToCheck[i].get(j).getValue());
-							helperHashtable[helperIndex].add(helperKeyValuePair);
+				if(!hashtableToCheck[i].isEmpty()) {														 
+					for (int j = 0; j < hashtableToCheck[i].size(); j++) {									 
+						if(!hashtableToCheck[i].get(j).equals(null)) {										 
+							double helperIndexDouble = Math.ceil(hashtableToCheck[i].get(j).getKey().hashCode() % helperHashtable.length); // Ermittle den Index zum 'key' als 'double'.	
+							int helperIndex = (int) Math.ceil(helperIndexDouble);							 // Runde den 'double' auf und mache cast zum 'int'
+							if(helperIndex < 0) {															 // Wenn 'helperIndex' negativ...
+								helperIndex *= -1;															 // ... multipliziere 'helperIndex' mit -1
+							}		
+							KeyValuePair helperKeyValuePair = new KeyValuePair(hashtableToCheck[i].get(j).getKey(), hashtableToCheck[i].get(j).getValue()); 
+							helperHashtable[helperIndex].add(helperKeyValuePair); 			// Fuege alle Elemente des alten Array an entsprechende Position im neuen Array.
 						}
 					}
 				}																			
 			}
-			return helperHashtable;
+			return helperHashtable; 														// Gibt den vergroesserten und umgeschriebenen 'Hashtable' zurueck
 		}
-		return hashtableToCheck;
+		return hashtableToCheck; 															// Gibt unveraenderten 'Hashtable' zurueck.
 	}
 
 	@Override
@@ -240,3 +240,4 @@ public class Hashtable<T> implements Map {
 	} // Ende der inneren Klasse 'KeyValuePair'.
 
 }
+
