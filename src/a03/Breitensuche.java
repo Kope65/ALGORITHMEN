@@ -23,15 +23,15 @@ public class Breitensuche {
 	// Main-Methode zum Testen der Klasse 'Breitensuche'
 	public static void main(String[] args) {
 		long start = System.currentTimeMillis();		
-		Graph graph = GraphLesen.FileToGraph("./GraphenBeispiele/graph8.txt", true);
+		Graph graph = GraphLesen.FileToGraph("./GraphenBeispiele/graph20.txt", false);
 		System.out.println(graph.toString());
-		System.out.println("Breitensuche: " + Breitensuche.depthBreadthSearch(graph, 3));
+		Breitensuche.depthBreadthSearch(graph, 2);
 		for (int i = 0; i < search.length; i++) {		     
 		    	 System.out.print("Vertex: " + i + "\n" + "Vorgaenger: " + search[i][0] + " Distanz: " + search[i][1] + "\n");		     
-		 }
-		System.out.println("Kuerzester Weg zwischen zwei Vertices: " + Breitensuche.shortestPathBetweenTwoVertices(graph, 3, 5));		
+		}
+		System.out.println("\n" + "Kuerzester Weg zwischen zwei Vertices: " + Breitensuche.shortestPathBetweenTwoVertices(graph, 0, 7) + "\n");		
 		long end = System.currentTimeMillis();
-		System.out.println("Ausfuehrung: " + (end - start) + " Millisekunden");
+		System.out.println("Ausfuehrung: " + (end - start) + " Millisekunden" + "\n");
 	}
 	
 	/**
