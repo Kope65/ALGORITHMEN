@@ -1,244 +1,107 @@
 package a03;
 
-import java.util.*;
-
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
- * @author Katharina-Sophia Bolinski s791580, Toni Kluth s780025
+ * Klasse 'Breitensuche' zum finden der kuerzesten Wege in einem 'Graph'.
+ * 
+ * @author @author Katharina-Sophia Bolinski s791580, Toni Kluth s780025
  */
-
 public class Breitensuche {
 
-	private static HashMap<Vertex, Integer> search = new HashMap<Vertex, Integer>();
-	private static Queue queue;
-	private static Vertex[] pred;
-	private static int[] dist;
-	private static String[] col;
-	private static int distCounter = 0;
-	private static LinkedList<Vertex> shortestPath = new LinkedList<Vertex>();
+	private static HashMap<Vertex, Integer> search = new HashMap<Vertex, Integer>();	// Eine Collection aller Vertices mit ihren Vorgaengern und ihrer Distanz
+	private static LinkedList<Vertex> shortestPath = new LinkedList<Vertex>();			// Eine LinkedList die den kuerzesten Weg zwischen zwei Vertices enthaelt
+	private static Queue queue;															// Eine Queue mit den vom Startvertex erreichten Vertices
+	private static Vertex[] pred;														// Array mit dem Vorgaenger des jeweiligen Vertex 'Index'
+	private static int[] dist;															// Array mit der Distanz des jeweiligen Vertex 'Index'
+	private static String[] col;														// Array mit der Farbe des jeweiligen Vertex 'Index'
+	private static int distCounter;														// Der Zaehler für die Distanz
 	
-	public static void main(String[] args) {
-		long start = System.currentTimeMillis();
-		
-		Graph graph = GraphLesen.FileToGraph("./GraphenBeispiele/graph8.txt", true);
-		System.out.println(graph.toString());
-
-		System.out.println("Breitensuche HashMap: " + depthBreadthSearch(graph, 3));
-		System.out.println("Kuerzester Weg zwischen zwei Vertices: " + Breitensuche.shortestPathBetweenTwoVertices(graph, 3, 5));
-		
-		long end = System.currentTimeMillis();
-		System.out.println("Ausfuehrung: " + (end - start) + " Millisekunden");
-	}
-
 	/**
+	 * Statische Methode zum Durchlaufen eines 'Graph' mit der Breitensuche. 
 	 * 
-	 * @param graph
-	 * @param startPoint
-	 * @return
+	 * @param graph Der 'Graph' fuer den die Breitensuche durchgefuehrt werden soll. 
+	 * @param startPoint Der 'Vertex' bei dem die Breitensuche im uebergebenen 'Graph' startet.
+	 * @return Liefert eine Collection mit den kuerzesten Wegen eines Startvertex zu allen anderen erreichbaren Vertices zurueck. 
 	 */
 	public static HashMap<Vertex, Integer> depthBreadthSearch(Graph graph, int startPoint) {
-		initializeGraph(graph, startPoint);
-		System.out.println("Sei " + startPoint + " der Startvertex: ");
+		initializeGraph(graph, startPoint); // Initialisiert alle Parameter mit dem uebergebenen 'Graph' und dem 'startPoint'
+		System.out.println("Sei " + startPoint + " der Startvertex: "); /** Ausgabe fuer Test **/
 		for(int i = 0; i < graph.getNumberVertices(); i++) {
 			search.put(pred[i], dist[i]);
-			System.out.println("Vertex: " + i + " / Vorgaenger: " + pred[i] + " / Distanz: " + dist[i]);
+			System.out.println("Vertex: " + i + " / Vorgaenger: " + pred[i] + " / Distanz: " + dist[i]); /** Ausgabe fuer Test **/
 		}
 		return search;
 	}
 	
 	/**
+	 * Statische Methode zum finden des kuerzesten Weges zwischen zwei Vertices in einem uebergebenen 'Graph'. 
 	 * 
-	 * @param graph
-	 * @param startPoint
-	 * @param endPoint
-	 * @return
+	 * @param graph Der 'Graph' fuer den die Breitensuche durchgefuehrt werden soll. 
+	 * @param startPoint Der 'Vertex' bei dem die Breitensuche im uebergebenen 'Graph' startet.
+	 * @param endPoint Der 'Vertex' zu dem der kuerzeste Weg im uebergebenen 'Graph' gefunden werden soll.
+	 * @return Liefert eine LinkedList<Vertex> mit dem kuerzesten Weg vom 'startPoint' zum 'endPoint' zurueck.
+	 * 		   Liefert 'null' zurueck, wenn der 'endPoint' nicht erreichbar ist.
 	 */
 	public static LinkedList<Vertex> shortestPathBetweenTwoVertices(Graph graph, int startPoint, int endPoint) {
-		initializeGraph(graph, startPoint);
-		if(col[endPoint].equals("white")) {
-			return null;
+		initializeGraph(graph, startPoint); // Initialisiert alle Parameter mit dem uebergebenen 'Graph' und dem 'startPoint'
+		if(col[endPoint].equals("white")) { // Wenn der 'endPoint' die Farbe "white" ('Vertex' unbesucht) hat:
+			return null;					// Liefere 'null' zurueck. 'endPoint' nicht erreichbar
 		}
-		shortestPath.add(new Vertex(endPoint));
-		Vertex predVertex = pred[endPoint];
-		while(predVertex.getId() != startPoint) {
-			shortestPath.add(predVertex);
-			predVertex = pred[predVertex.getId()];
+		shortestPath.add(new Vertex(endPoint));  	// Fuegt 'endPoint' in die zurueckzuliefernde 'LinkedList' ein
+		Vertex predVertex = pred[endPoint]; 		// Helfervariable: enthaelt den Vorgaenger des 'endPoint'
+		while(predVertex.getId() != startPoint) { 	// Solange der 'endPoint' ungleich 'startPoint' ist:
+			shortestPath.add(predVertex); 			// Fuege aktuellen Vorgaenger in 'LinkedList' ein 
+			predVertex = pred[predVertex.getId()];	// Uebergebe Helfervariable den Vorgaenger des Vorgaengers
 		}
-		shortestPath.add(predVertex);
-		Collections.reverse(shortestPath);
-		return shortestPath;		
+		shortestPath.add(predVertex);		// Fuege den letzten Vorgaenger in 'LinkedList' ein (enspricht 'startPoint')
+		Collections.reverse(shortestPath);	// Invertiere die Reihenfolge der zurueckzuliefernden 'LinkedList'
+		return shortestPath;				// Liefere 'LinkedList' zurueck
 	}
 	
 	/**
+	 * Private, statische Methode der Klasse 'Breitensuche'. In dieser Methode werden alle noetigen Parameter fuer 
+	 * die Breitensuche initialisiert.
 	 * 
-	 * @param graph
-	 * @param startPoint
+	 * @param graph Der 'Graph' fuer den die Breitensuche durchgefuehrt werden soll. 
+	 * @param startPoint Der 'Vertex' bei dem die Breitensuche im uebergebenen 'Graph' startet.
 	 */
 	private static void initializeGraph(Graph graph, int startPoint) {
 		Vertex startVertex = new Vertex(startPoint);
 		queue = new LinkedList<Vertex>();
-		pred = new Vertex[graph.getNumberVertices()];
-		dist = new int[graph.getNumberVertices()];
-		col = new String[graph.getNumberVertices()];	
+		pred = new Vertex[graph.getNumberVertices()]; 	// Initialisiere Groesse des Arrays 'pred'
+		dist = new int[graph.getNumberVertices()];		// Initialisiere Groesse des Arrays 'dist'
+		col = new String[graph.getNumberVertices()];	// Initialisiere Groesse des Arrays 'col'
+		distCounter = 0;
 		
-		for (int i = 0; i < graph.getNumberVertices(); i++) {
+		for (int i = 0; i < graph.getNumberVertices(); i++) { // Fuer alle Elemente der Arrays, initialisiere Defaultwerte
 			col[i] = "white";
 			pred[i] = null;
 			dist[i] = -1;
 		}
-		queue.add(startVertex.getId());		
-		dist[startVertex.getId()] = 0;
+		queue.add(startVertex.getId());						// Fuegt den Startvertex als erstes Element in die Queue ein
+		dist[startVertex.getId()] = distCounter;			// Defaultdistanz des Startvertex = 0
 		
-		while (!queue.isEmpty()) {
-			distCounter++;
-			Vertex currentVertex = new Vertex((Integer) queue.element());
-			col[currentVertex.getId()] = "grey";
-			LinkedList<Vertex> neighbours = (LinkedList<Vertex>) graph.getNeighbours(currentVertex);
-			for (int i = 0; i < neighbours.size(); i++) {
-				int neighbour = neighbours.get(i).getId();
-				if (col[neighbour].equals("white")) {
-					queue.add(neighbour);
-					col[neighbour] = "grey";
-					pred[neighbour] = currentVertex;
-					dist[neighbour] = distCounter;
+		while (!queue.isEmpty()) {							// Solange 'queue' nicht leer ist:
+			distCounter++; 									// Zaehle Zaehler hoch			
+			Vertex currentVertex = new Vertex((Integer) queue.element()); // Helfervariable: enthaelt den aktuellen 'Vertex' der 'Queue'
+			col[currentVertex.getId()] = "grey"; 			// Setze Farbe des aktuellen 'Vertex' auf "grey" ('Vertex' besucht, Nachbarn unbesucht)
+			LinkedList<Vertex> neighbours = (LinkedList<Vertex>) graph.getNeighbours(currentVertex); // Liste mit allen Nachbarn des aktuellen 'Vertex'
+			
+			for (int i = 0; i < neighbours.size(); i++) { 	// Fuer alle Nachbarn:
+				int neighbour = neighbours.get(i).getId(); 		// Helfervariable: enthaelt den aktuellen Nachbarn des aktuellen 'Vertex'
+				if (col[neighbour].equals("white")) { 			// Wenn die Farbe des aktuellen Nachbarn "white" ('Vertex' unbesucht) ist:
+					queue.add(neighbour);				 		// Fuege aktuellen Nachbarn in der 'Queue' ein
+					col[neighbour] = "grey";					// Setze Farbe des aktuellen Nachbarn auf "grey"
+					pred[neighbour] = currentVertex;			// Lege den aktuellen 'Vertex' als Vorgaenger des aktuellen Nachbarn fest
+					dist[neighbour] = distCounter;				// Lege die Distanz zum Startvertex fest
 				}
-				col[currentVertex.getId()] = "black";
+				col[currentVertex.getId()] = "black";		// Setze Farbe des aktuellen 'Vertex' auf "black" ('Vertex' und alle Nachbarn besucht)
 			}
-			queue.remove();
+			queue.remove();									// Entferne aktuellen 'Vertex' aus der 'Queue'
 		}
 	}
 }
-//public class Breitensuche {
-//	public static void main(String[] args) {
-//		int[] starts = {};
-//		int[] paths = {};
-//		Graph[] graphs = { GraphLesen.FileToGraph(".src/a03/graph8.txt", true),
-//				GraphLesen.FileToGraph("./src/a03/graph8.txt", true),
-//				GraphLesen.FileToGraph("./src/a03/graph20.txt", true),
-//				GraphLesen.FileToGraph("./src/a03//graph20.txt", false) };
-//		for (int i = 0; i <= graphs.length; i++) {
-//			System.out.print(graphs[i]);
-//			long start = System.currentTimeMillis();
-//			DepthBreadthSearch(graphs[i], starts[i]);
-//			System.out.println(ShortestPath(graphs[i], starts[i], paths[i]));
-//			long end = System.currentTimeMillis();
-//			System.out.println("Took " + (end - start) + " Milliseconds");
-//		}
-//	}
-//
-//	/**
-//	 * Funktion zur Breitensuche
-//	 * 
-//	 * @param graph
-//	 * @param startPoint
-//	 * @return
-//	 * @throws IllegalArgumentException
-//	 */
-//
-//	public static HashMap<Vertex, Integer> DepthBreadthSearch(Graph graph,
-//			int startPoint) throws IllegalArgumentException {
-//		if (graph.getVertex(startPoint) == null) {
-//			throw new IllegalArgumentException("Startpoint doesn't exist.");
-//		}
-//		Queue<Vertex> q = new LinkedList<Vertex>();
-//		List<Vertex> visited = new ArrayList();
-//		HashMap<Vertex, Integer> depth = new HashMap<Vertex, Integer>();
-//		Vertex og = graph.getVertex(startPoint);
-//
-//		depth.put(og, 0);
-//		q.add(og);
-//		visited.add(og);
-//
-//		System.out.printf("%-5s %-5s %-5s %-5d %-5s %-5d\n", "Vertex : ", og,
-//				" pred: ", 0, "dist:", depth.get(og));
-//		while (!q.isEmpty()) {
-//			Vertex parent = q.remove();
-//			Collection<Vertex> neighbours = graph.getNeighbours(parent);
-//			while (!visited.containsAll(neighbours)) {
-//				for (Vertex child : neighbours) {
-//					if (!visited.contains(child)) {
-//						depth.put(child, depth.get(parent) + 1);
-//						visited.add(child);
-//						q.add(child);
-//						System.out.printf("%-5s %-5s %-5s %-5s %-5s %-5d \n",
-//								"Vertex : ", child.toString(), " pred: ",
-//								parent, "dist:", depth.get(child));
-//					}
-//				}
-//			}
-//		}
-//		return depth;
-//	}
-//
-//	/**
-//	 * 
-//	 * @param graph
-//	 *            ist der zu durchsuchende Graph
-//	 * @param startPoint
-//	 *            der Anfangsknoten
-//	 * @param endPoint
-//	 *            der Endknoten
-//	 * @return
-//	 * @throws IllegalArgumentException
-//	 */
-//	public static List<Vertex> ShortestPath(Graph graph, int startPoint,
-//			int endPoint) throws IllegalArgumentException {
-//		if (graph.getVertex(startPoint) == null
-//				|| graph.getVertex(endPoint) == null) {
-//			throw new IllegalArgumentException(
-//					"Startpoint or Endpoint doesn't exist");
-//		}
-//		Queue<Vertex> q = new LinkedList<Vertex>();
-//		List<Vertex> visited = new ArrayList();
-//		HashMap<Vertex, Integer> depth = new HashMap<Vertex, Integer>();
-//		HashMap<Vertex, Vertex> pred = new HashMap<Vertex, Vertex>();
-//		Vertex og = graph.getVertex(startPoint);
-//
-//		depth.put(og, 0);
-//		q.add(og);
-//		visited.add(og);
-//		boolean found = false;
-//
-//		while (!q.isEmpty()) {
-//			Vertex parent = q.remove();
-//			Collection<Vertex> neighbours = graph.getNeighbours(parent);
-//			while (!visited.containsAll(neighbours)) {
-//				for (Vertex child : neighbours) {
-//					if (child.equals(graph.getVertex(endPoint))) {
-//						pred.put(child, parent);
-//						depth.put(child, depth.get(parent));
-//						q.clear();
-//						found = true;
-//						break;
-//					}
-//					if (!visited.contains(child)) {
-//						pred.put(child, parent);
-//						depth.put(child, depth.get(parent));
-//						visited.add(child);
-//						q.add(child);
-//					}
-//				}
-//				if (found) {
-//					break;
-//				}
-//			}
-//		}
-//		List<Vertex> path = new ArrayList();
-//		q.add(graph.getVertex(endPoint));
-//		for (int i = 0; !q.isEmpty(); i++) {
-//			Vertex parent = q.remove();
-//			path.add(parent);
-//			Vertex predes = pred.get(parent);
-//			if (predes == graph.getVertex(startPoint)) {
-//				path.add(predes);
-//				return path;
-//			}
-//			q.add(predes);
-//			if (i > graph.getNumberVertices()) {
-//				break;
-//			}
-//		}
-//		return null;
-//	}
-//}
-
